@@ -1,0 +1,203 @@
+openapi: 3.0.1
+info:
+  title: docker4ssh
+  description: Communicate between a container and the docker4ssh host
+  version: 0.1.0
+  license:
+    name: GNU Affero General Public License v3.0
+    url: https://www.gnu.org/licenses/agpl-3.0.txt
+  contact:
+    name: ByteDream
+    url: https://github.com/ByteDream
+servers:
+  - url: 'unix:///var/run/docker4ssh.sock'
+paths:
+  /ping:
+    get:
+      summary: Ping the server to see if it's latency and if it's alive
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  received:
+                    type: integer
+                    description: Unix nano timestamp when the message was received
+  /error:
+    get:
+      summary: Sends an error with code 400, only for test purposes
+      responses:
+        400:
+          description: Controlled bad return code
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Example error message
+  /info:
+    get:
+      summary: Get information about the current container
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  container_id:
+                    type: string
+                    description: ID of the container
+  /config:
+    get:
+      summary: Get the configuration of the current container
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  network_mode:
+                    type: integer
+                    enum:
+                      - 1
+                      - 2
+                      - 3
+                      - 4
+                      - 5
+                    description: The container network mode. Take a look at server/docker/docker.go for extended information
+                  configurable:
+                    type: boolean
+                    description: If the container should be configurable from within
+                  run_level:
+                    type: integer
+                    enum:
+                      - 1
+                      - 2
+                      - 3
+                    description: The container run level / behavior. Take a look at server/docker/docker.go for extended information
+                  startup_information:
+                    type: boolean
+                    description: If information about the container should be shown when a user connects
+                  exit_after:
+                    type: string
+                    description: The process name after the container exits
+                  keep_on_exit:
+                    type: boolean
+                    description: If the container should be not deleted after exit
+    post:
+      summary: Set some config settings
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                network_mode:
+                  type: integer
+                  enum:
+                    - 1
+                    - 2
+                    - 3
+                    - 4
+                    - 5
+                  description: The container network mode. Take a look at server/docker/docker.go for extended information
+                configurable:
+                  type: boolean
+                  description: If the container should be configurable from within
+                run_level:
+                  type: integer
+                  enum:
+                    - 1
+                    - 2
+                    - 3
+                  description: The container run level / behavior. Take a look at server/docker/docker.go for extended information
+                startup_information:
+                  type: boolean
+                  description: If information about the container should be shown when a user connects
+                exit_after:
+                  type: string
+                  description: The process name after the container exits
+                keep_on_exit:
+                  type: boolean
+                  description: If the container should be not deleted after exit
+      responses:
+        200:
+          description: Settings was made
+        406:
+          description: One or more settings could not be changed
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    description: Human readable description why the changes could not be made
+                  rejected:
+                    type: array
+                    description: The rejected changes
+                    items:
+                      type: object
+                      description: The rejected setting + a description why it couldn't be processed
+                      properties:
+                        name:
+                          type: string
+                          description: Name of the setting
+                        description:
+                          type: string
+                          description: Description of the processing error
+
+  /auth:
+    get:
+      summary: Returns the current username used for ssh authentication and if a password is set
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user:
+                    type: string
+                    description: Username
+                  has_password:
+                    type: boolean
+                    description: If a password is set
+        404:
+          description: Auth does not exist
+          content:
+            application/json:
+              schema:
+                type: string
+                description: Message that the auth does not exists
+    post:
+      summary: Changes authentication for the current container
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user:
+                  type: string
+                  description: The new username. Cannot be empty but nullable
+                password:
+                  type: string
+                  description: The new password. If empty or null, the complete authentication gets deleted
+      responses:
+        200:
+          description: Configuration was changed
+        406:
+          description: The given username was empty

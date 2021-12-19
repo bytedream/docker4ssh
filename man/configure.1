@@ -1,0 +1,96 @@
+.TH configure 1 "December 13, 2021" configure "configure - manage docker4ssh container from within"
+
+.SH NAME
+docker4ssh - docker containers and more via ssh
+
+.SH AUTH GET
+This can only be used when calling \fIauth get\fR.
+.br
+It returns the current username (with which you can login to the container), if a password is set and if the container is reachable for other ssh connections.
+
+.SH AUTH SET
+This can only be used when calling \fIauth set\fR.
+.TP
+
+\fB--user\fR = user
+The container username. It is used if you want to (re)connect to the container.
+.TP
+
+\fB--password\fR = password
+The container password. If empty, the authentication gets removed.
+
+.SH ERROR
+This can only be used when calling \fIerror\fR.
+.br
+The subcommand only exists for testing purposes and always return a 400 error.
+
+.SH INFO
+This can only be used when calling \fIinfo\fR.
+.br
+It returns info about the container. Currently only the full container id is shown.
+
+.SH PING
+This can only be used when calling \fIping\fR.
+.br
+It returns the ping to the docker4ssh host with a nice little message :)
+
+.SH CONFIG GET
+This can only be used when calling \fIconfig get\fR.
+.br
+It returns the container configuration with the details NetworkMode, Configurable, RunLevel, ExitAfter and KeepOnExit (\fIprofile.conf (5)\fR).
+
+.SH CONFIG SET
+This can only be used when calling \fIconfig set\fR.
+.TP
+
+\fB--configurable\fI = true | false
+If the container should be configurable (calling the binary this manual is about).
+Once called this can only be reverted when the database is edited manually.
+.TP
+
+\fB--exit-after\fR = exit after
+Process name to stop the container after the process ends.
+.TP
+
+\fB--keep-on-exit\fR = true | false
+If the container should or should not be deleted when it stops working.
+.TP
+
+\fB--network-mode\fR = 1 | 2 | 3 | 4 | 5
+This describes the behavior of the container's network
+Must be one of the following:
+    1 (Off): Disable networking complete.
+    2 (Isolate): Isolates the container from the host and the host's network. Therefore, no configurations can be changed from within the container.
+    3 (Host): Default docker network.
+    4 (Docker): Same as \fI3\fR but the container is in a docker4ssh controlled subnet. This is useful to differ normal from docker4ssh containers.
+    5 (None): disables all isolation between the docker container and the host, so inside the network the container can act as the host. So it has access to the host's network directly.
+.TP
+
+\fB--run-level\fR = 1 | 2 | 3
+This describes the container behavior when the user connection to a container is stopped.
+Must be one of the following:
+    1 (User): The container stops working if no user is connected to it anymore.
+    2 (Container): The container runs when no user is connected \fIExitAfter\fR is specified.
+    3 (Forever): The container runs forever.
+
+.SH BUGS
+Discovered a bug? Well then it should get fixed as fast as possible. Feel free to open a new issue (https://github.com/ByteDream/crunchyroll-go/docker4ssh) or create a pull request (https://github.com/ByteDream/docker4ssh/pulls) on github.
+
+.SH AUTHOR
+Written by ByteDream (https://github.com/ByteDream)
+
+.SH COPYRIGHT
+Copyright (C) 2021 ByteDream
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.

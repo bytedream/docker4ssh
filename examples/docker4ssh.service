@@ -1,0 +1,14 @@
+[Unit]
+Description=
+After=network.target docker.service
+StartLimitBurst=3
+StartLimitIntervalSec=60
+
+[Service]
+Type=simple
+WorkingDirectory=/etc/docker4ssh
+ExecStart=/usr/bin/docker4ssh
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

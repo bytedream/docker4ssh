@@ -1,0 +1,81 @@
+.TH docker4ssh.conf 5 "December 13, 2021" docker4ssh.conf "docker4ssh configuration file"
+
+.SH SYNOPSIS
+.TP
+/etc/docker4ssh/profile/*
+
+.SH SECTION NAME
+.TP
+A representative name for the profile
+
+.SH KEYS
+\fBUsername\fR = username
+Username for this profile.
+The username can be specified as plain text or regex:
+    Regex: Put \fIregex:\fR in front of it. The regex must must be \fBgo\fR / \fBgolang\fR compatible. Visit \fIregex101.com\fR to validate your regex.
+.TP
+
+.TP
+\fBPassword\fR = password
+Password for the profile.
+The password can be specified as plain text, regex or hash:
+    Regex: Put \fIregex:\fR in front of it. The regex must must be \fBgo\fR / \fBgolang\fR compatible. Visit \fIregex101.com\fR to validate your regex.
+    Hash: Put \fIsha1:\fR, \fIsha256:\fR or \fIsha512:\fR in front of it. Note that the hash must be hashed with the prefix algorithm.
+.TP
+
+\fBNetworkMode\fR = 1 | 2 | 3 | 4 | 5
+Default network mode for every connection.
+NetworkMode describes the behavior of the container's network
+Must be one of the following:
+    1 (Off): Disable networking complete.
+    2 (Isolate): Isolates the container from the host and the host's network. Therefore, no configurations can be changed from within the container.
+    3 (Host): Default docker network.
+    4 (Docker): Same as \fI3\fR but the container is in a docker4ssh controlled subnet. This is useful to differ normal from docker4ssh containers.
+    5 (None): disables all isolation between the docker container and the host, so inside the network the container can act as the host. So it has access to the host's network directly.
+.TP
+
+\fBConfigurable\fR = true | false
+Default configurable setting for every connection.
+Configurable describes if the container should be configurable from within it. This means that the connect user is able to change all settings which are described here.
+Must be true or false.
+.TP
+
+\fBRunLevel\fR = 1 | 2 | 3
+Default run level for every connection.
+RunRevel describes the container behavior when the user connection to a container is stopped.
+Must be one of the following:
+    1 (User): The container stops working if no user is connected to it anymore.
+    2 (Container): The container runs when no user is connected \fIExitAfter\fR is specified.
+    3 (Forever): The container runs forever.
+.br
+Note that the container exits always, independent of its RunLevel, when the via \fIExitAfter\fR specified process ends.
+.TP
+
+\fBStartupInformation\fR = true | false
+Default startup information setting for every connection.
+StartupInformation specifies if information about the container (id, network mode, ...) should be shown when a user connects to it.
+Must be true or false.
+.TP
+
+\fBExitAfter\fR = exit after
+Default exit after process for every process.
+ExitAfter is a process name after which end the container should stop running.
+.TP
+
+\fBKeepOnExit\fR = true | false
+Default keep on exit setting for every connection.
+KeepOnExit specifies if the container should be saved when it stops working.
+Must be true or false.
+
+.SH EXAMPLE
+[test]
+.br
+Username = "test"
+.br
+Image = "alpine:latest"
+
+.SH SEE ALSO
+docker4ssh(1), docker4ssh.conf(5)
+
+.SH AUTHORS
+Written by ByteDream (https://github.com/ByteDream)

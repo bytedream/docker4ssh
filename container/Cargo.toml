@@ -1,0 +1,25 @@
+[package]
+name = "docker4ssh"
+version = "0.1.0"
+edition = "2021"
+authors = ["ByteDream"]
+repository = "https://github.com/ByteDream/docker4ssh"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "configure"
+path = "src/configure/main.rs"
+
+[dependencies]
+failure = "0.1"
+log = "0.4"
+structopt = "0.3"
+serde = { version = "1.0", features = ["derive"]}
+serde_json = "1.0"
+serde_repr = "0.1"
+
+[profile.release]
+lto = true
+opt-level = "z"
+panic = "abort"

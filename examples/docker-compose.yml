@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  docker4ssh:
+    build: .
+    ports:
+      - "8642:8642"
+    volumes:
+      - "./docker4ssh.log.log:/docker4ssh/docker4ssh.log"
+    restart: unless-stopped
+    container_name: docker4ssh
