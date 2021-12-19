@@ -47,17 +47,11 @@
 
 For every install method your OS **must** be linux and docker has to be installed.
 
-- Download from the latest release (currently only x64 architecture supported)
-  - Download `docker4ssh-<version>.tar.gz` from the [latest release](https://github.com/ByteDream/docker4ssh/releases/latest)
-  - Install it
-    - Into your root directory (recommended)
-    ```shell
-    $ sudo tar -xvzf docker4ssh-<version>.tar.gz -C /
-    ```
-    - To the same directory
-    ```shell
-    $ sudo tar -xvzf docker4ssh-<version>.tar.gz
-    ```
+- From the latest release (currently only x64 architecture supported)
+
+  Replace the `RELEASE` value in the following oneliner with the latest release [version](https://github.com/ByteDream/docker4ssh/releases/latest).
+  ```shell
+  $ RELEASE=<latest version> curl -L https://github.com/ByteDream/docker4ssh/releases/download/v$RELEASE/docker4ssh-$RELEASE.tar.gz | tar -xvzf - -C /
 - Building from source
 
     Before start installing, make sure you have to following things ready:
@@ -69,6 +63,7 @@ For every install method your OS **must** be linux and docker has to be installe
     ```shell
     $ git clone https://github.com/ByteDream/docker4ssh
     $ cd docker4ssh
+    $ make build
     $ make install
     ```
 
