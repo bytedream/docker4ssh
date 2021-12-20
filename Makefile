@@ -17,15 +17,15 @@ build-container:
 	fi
 	cp -rf $(_BUILDDIR)/x86_64-unknown-linux-musl/$(shell if $(DEBUG); then echo debug; else echo release; fi)/configure $(_BUILDDIR)
 
-build-extra: SSHPASS:=$(shell LC_ALL=C tr -dc 'A-Za-z0-9!#$%&()*,-./:<=>?@[\]^_{}~' < /dev/urandom | head -c 18 ; echo)
+build-extra: SSHPASS:=$(shell LC_ALL=C tr -dc 'A-Za-z0-9!#$%&()*,-.:<=>?@[]^_{}~' < /dev/urandom | head -c 18 ; echo)
 build-extra:
-	if [ "$(_BUILDDIR)" != "$(shell realpath .)/" ]; then\
+	@if [ "$(_BUILDDIR)" != "$(shell realpath .)/" ]; then\
 		cp -rf LICENSE $(_BUILDDIR)/LICENSE;\
 		cp -rf man/ $(_BUILDDIR);\
 	fi
 	yes | ssh-keygen -t ed25519 -f $(_BUILDDIR)/docker4ssh.key -N "$(SSHPASS)" -b 4096 > /dev/null
 	cp -rf extra/docker4ssh.conf $(_BUILDDIR)
-	sed -i 's|Passphrase = ""|Passphrase = "$(SSHPASS)"|' $(_BUILDDIR)/docker4ssh.conf
+	sed -i "s|Passphrase = \"\"|Passphrase = \"$(SSHPASS)\"|" $(_BUILDDIR)/docker4ssh.conf
 	cat extra/database.sql | sqlite3 $(_BUILDDIR)/docker4ssh.sqlite3
 	mkdir -p $(_BUILDDIR)/profile/ && cp -f extra/profile.conf $(_BUILDDIR)/profile/
 
