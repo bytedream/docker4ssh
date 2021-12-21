@@ -1,21 +1,18 @@
 use std::collections::HashMap;
 use std::io::{Read, Write};
 use std::net::TcpStream;
-use log::Level::Error;
 use serde::Deserialize;
 
 pub type Result<T> = std::result::Result<T, failure::Error>;
 
 pub struct API {
     route: String,
-    host: String,
 }
 
 impl API {
-    pub const fn new(route: String, host: String) -> Self {
+    pub const fn new(route: String) -> Self {
         API {
             route,
-            host,
         }
     }
 
@@ -86,7 +83,7 @@ impl APIResult {
         let result: T = serde_json::from_str(&self.result_body).map_err(|e| {
             // checks if the error has a body and if so, return it
             if self.has_body() {
-                let error: APIError = serde_json::from_str(&self.result_body).unwrap_or_else(|ee| {
+                let error: APIError = serde_json::from_str(&self.result_body).unwrap_or_else(|_| {
                     APIError{message: format!("could not deserialize response: {}", e.to_string())}
                 });
                 failure::format_err!("Failed to call '{}': {}", self.request_path, error.message)

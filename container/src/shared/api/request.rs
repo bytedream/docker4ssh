@@ -1,6 +1,5 @@
 use std::fmt::{Display, Formatter};
 use serde::{Deserialize, Serialize};
-use serde::de::Unexpected::Str;
 use serde_repr::{Deserialize_repr, Serialize_repr};
 
 use crate::shared::api::api::{API, Method, Request, Result};

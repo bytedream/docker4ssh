@@ -1,5 +1,3 @@
-use std::f32::consts::E;
-use std::fmt::format;
 use crate::shared::api::request::{ConfigNetworkMode, ConfigRunLevel};
 
 pub fn parse_network_mode(src: &str) -> Result<ConfigNetworkMode, String> {

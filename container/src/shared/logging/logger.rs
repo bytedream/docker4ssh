@@ -1,9 +1,9 @@
-use log::{info, Metadata, Record};
+use log::{Metadata, Record};
 
 pub struct Logger;
 
 impl log::Log for Logger {
-    fn enabled(&self, metadata: &Metadata) -> bool {
+    fn enabled(&self, _metadata: &Metadata) -> bool {
         true
     }
 
@@ -13,7 +13,5 @@ impl log::Log for Logger {
         }
     }
 
-    fn flush(&self) {
-        todo!()
-    }
+    fn flush(&self) {}
 }

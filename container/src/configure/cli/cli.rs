@@ -1,7 +1,4 @@
-use std::fmt::{Debug, format};
-use std::net::TcpStream;
-use std::os::unix::process::ExitStatusExt;
-use std::process::{Command, ExitStatus};
+use std::process::Command;
 use std::time::SystemTime;
 use log::{info, warn};
 use structopt::StructOpt;
@@ -9,7 +6,7 @@ use structopt::clap::AppSettings;
 use crate::configure::cli::parser;
 use crate::shared::api::api::API;
 use crate::shared::api::request;
-use crate::shared::api::request::{ConfigGetResponse, ConfigNetworkMode, ConfigPostRequest, ConfigRunLevel};
+use crate::shared::api::request::{ConfigGetResponse, ConfigNetworkMode, ConfigRunLevel};
 
 type Result<T> = std::result::Result<T, failure::Error>;
 
@@ -24,9 +21,6 @@ trait Execute {
     settings = &[AppSettings::ArgRequiredElseHelp]
 )]
 struct Opts {
-    #[structopt(short, long, global = true, help = "Verbose output")]
-    verbose: bool,
-
     #[structopt(subcommand)]
     commands: Option<Root>
 }
@@ -259,7 +253,7 @@ enum Root {
 pub fn cli(route: String) {
     if let Some(subcommand) = Opts::from_args().commands {
         let mut result: Result<()> = Ok(());
-        let mut api = API::new(route, String::new());
+        let mut api = API::new(route);
         match subcommand {
             Root::Auth(auth) => {
                 if let Some(subsubcommand) = auth.commands {

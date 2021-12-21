@@ -1,13 +1,13 @@
 use std::fs;
-use std::net::TcpStream;
-use std::os::unix::net::UnixStream;
 use std::process::exit;
-use log::{LevelFilter, trace, warn, info, error};
+use log::{LevelFilter, error};
 use docker4ssh::configure::cli;
 use docker4ssh::shared::logging::init_logger;
 
 fn main() {
-    init_logger(LevelFilter::Debug);
+    if init_logger(LevelFilter::Debug).is_err() {
+        println!("Failed to initialize logger");
+    }
 
     match fs::read_to_string("/etc/docker4ssh") {
         Ok(route) => cli(route),
