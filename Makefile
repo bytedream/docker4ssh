@@ -1,4 +1,4 @@
-VERSION=0.1.0
+VERSION=0.1.2
 
 BUILDDIR = .
 _BUILDDIR = $(shell realpath $(BUILDDIR))/
@@ -66,6 +66,8 @@ install:
 	install -Dm644 $(_BUILDDIR)man/* -t $(DESTDIR)/etc/docker4ssh/man/
 	install -Dm644 $(_BUILDDIR)profile/* -t $(DESTDIR)/etc/docker4ssh/profile/
 	install -Dm644 $(_BUILDDIR)LICENSE $(DESTDIR)/etc/docker4ssh/LICENSE
+
+	touch $(DESTDIR)/etc/docker4ssh/docker4ssh.log && chmod 777 $(DESTDIR)/etc/docker4ssh/docker4ssh.log
 
 uninstall:
 	rm -rf $(DESTDIR)/etc/docker4ssh/
