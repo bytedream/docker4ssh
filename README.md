@@ -51,7 +51,7 @@ For every install method your OS **must** be linux and docker has to be installe
 
   Replace the `RELEASE` value in the following oneliner with the latest release [version](https://github.com/ByteDream/docker4ssh/releases/latest).
   ```shell
-  $ export RELEASE=<latest version> && curl -L https://github.com/ByteDream/docker4ssh/releases/download/v$RELEASE/docker4ssh-$RELEASE.tar.gz | tar -xvzf - -C /
+  $ RELEASE=<latest version>; curl -L https://github.com/ByteDream/docker4ssh/releases/download/v$RELEASE/docker4ssh-$RELEASE.tar.gz | tar -xvzf - -C /
 - Building from source
 
     Before start installing, make sure you have to following things ready:
