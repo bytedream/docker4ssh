@@ -6,7 +6,7 @@ _BUILDDIR = $(shell realpath $(BUILDDIR))/
 build: build-server build-container build-extra
 
 build-server:
-	cd server/ && go build -o $(_BUILDDIR)/docker4ssh
+	cd server/ && CGO_ENABLED=0 go build -o $(_BUILDDIR)/docker4ssh
 
 build-container: DEBUG=false
 build-container:
