@@ -1,47 +1,22 @@
-FROM golang:1.17 as server
+FROM alpine:latest as build
 
 WORKDIR /docker4ssh
 
-COPY ["../", "."]
+RUN apk add git go make openssh rustup sqlite
 
-RUN apt update && \
-    apt install make sqlite3 && \
-    apt clean && \
-    apt autoremove && \
-    rm -rf /var/lib/apt/lists/*
+RUN rustup-init -y && \
+    ln -s $HOME/.cargo/bin/cargo /usr/bin/cargo
 
-RUN make BUILDDIR=build/ build-server
+RUN git clone https://github.com/ByteDream/docker4ssh .
 
-
-FROM rust:1.56 as client
-
-WORKDIR /docker4ssh
-
-COPY ../ .
-
-RUN apt update && \
-    apt install make \
-
-RUN make BUILDDIR=build/ build-client
-
-
-FROM alpine:lastest as extra
-
-WORKDIR /docker4ssh
-
-COPY ../ .
-
-RUN apk add make
-
-RUN make BUILDDIR=build/ build-extra
-
+RUN mkdir build/ && \
+    make BUILDDIR=build/ build && \
+    rm -rf build/release/ build/x86_64-unknown-linux-musl/
 
 FROM alpine:latest
 
 WORKDIR /docker4ssh
 
-COPY --from=server /docker4ssh/build/* .
-COPY --from=client /docker4ssh/build/docker4ssh .
-COPY --from=extra /docker4ssh/build/* .
+COPY --from=build /docker4ssh/build/ ./
 
-ENTRYPOINT docker4ssh
+ENTRYPOINT ./docker4ssh start

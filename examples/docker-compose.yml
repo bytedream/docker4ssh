@@ -2,10 +2,12 @@ version: '3'
 
 services:
   docker4ssh:
-    build: .
+    build: https://raw.githubusercontent.com/ByteDream/docker4ssh/main/examples/Dockerfile
     ports:
-      - "8642:8642"
+      - "2222:2222"
     volumes:
-      - "./docker4ssh.log.log:/docker4ssh/docker4ssh.log"
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
     restart: unless-stopped
     container_name: docker4ssh
