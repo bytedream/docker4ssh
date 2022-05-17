@@ -32,5 +32,3 @@ require (
 	golang.org/x/time v0.0.0-20220411224347-583f2d630306 // indirect
 	gotest.tools/v3 v3.2.0 // indirect
 )
-
-replace golang.org/x/term v0.0.0-20201126162022-7de9c90e9dd1 => github.com/ByteDream/term v0.0.0-20211025115508-891a970291e6
