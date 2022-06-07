@@ -1,5 +1,6 @@
 use std::process::Command;
 use std::time::SystemTime;
+use anyhow::Result;
 use log::{info, warn};
 use structopt::StructOpt;
 use structopt::clap::AppSettings;
@@ -7,8 +8,6 @@ use crate::configure::cli::parser;
 use crate::shared::api::api::API;
 use crate::shared::api::request;
 use crate::shared::api::request::{ConfigGetResponse, ConfigNetworkMode, ConfigRunLevel};
-
-type Result<T> = std::result::Result<T, failure::Error>;
 
 trait Execute {
     fn execute(self, api: &mut API) -> Result<()>;

@@ -1,9 +1,8 @@
 use std::collections::HashMap;
 use std::io::{Read, Write};
 use std::net::TcpStream;
+use anyhow::{anyhow, bail, Result};
 use serde::Deserialize;
-
-pub type Result<T> = std::result::Result<T, failure::Error>;
 
 pub struct API {
     route: String,
@@ -19,7 +18,7 @@ impl API {
     pub fn new_connection(&mut self) -> Result<TcpStream> {
         match TcpStream::connect(&self.route) {
             Ok(stream) => Ok(stream),
-            Err(e) => Err(failure::format_err!("Failed to connect to {}: {}", self.route, e.to_string()))
+            Err(e) => bail!("Failed to connect to {}: {}", self.route, e.to_string())
         }
     }
 
@@ -28,7 +27,7 @@ impl API {
 
         connection.write_all(request.as_string().as_bytes())?;
         let mut buf: String = String::new();
-        connection.read_to_string(&mut buf).map_err(|e| failure::err_msg(e.to_string()))?;
+        connection.read_to_string(&mut buf)?;
         Ok(APIResult::new(request, buf))
     }
 
@@ -36,7 +35,7 @@ impl API {
         let result = self.request(request)?;
         if result.result_code >= 400 {
             let err: APIError = result.body()?;
-            Err(failure::err_msg(format!("Error {}: {}", result.result_code, err.message)))
+            bail!("Error {}: {}", result.result_code, err.message)
         } else {
             Ok(result)
         }
@@ -80,15 +79,15 @@ impl APIResult {
     }
 
     pub fn body<'a, T: Deserialize<'a>>(&'a self) -> Result<T> {
-        let result: T = serde_json::from_str(&self.result_body).map_err(|e| {
+        let result = serde_json::from_str(&self.result_body).map_err(|e| {
             // checks if the error has a body and if so, return it
             if self.has_body() {
                 let error: APIError = serde_json::from_str(&self.result_body).unwrap_or_else(|_| {
                     APIError{message: format!("could not deserialize response: {}", e.to_string())}
                 });
-                failure::format_err!("Failed to call '{}': {}", self.request_path, error.message)
+                anyhow!("Failed to call '{}': {}", self.request_path, error.message)
             } else {
-                failure::format_err!("Failed to call '{}': {}", self.request_path, e.to_string())
+                anyhow!("Failed to call '{}': {}", self.request_path, e.to_string())
             }
         })?;
         Ok(result)

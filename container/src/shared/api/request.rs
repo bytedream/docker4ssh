@@ -1,8 +1,9 @@
 use std::fmt::{Display, Formatter};
+use anyhow::Result;
 use serde::{Deserialize, Serialize};
 use serde_repr::{Deserialize_repr, Serialize_repr};
 
-use crate::shared::api::api::{API, Method, Request, Result};
+use crate::shared::api::api::{API, Method, Request};
 use crate::shared::api::api::Method::POST;
 
 #[derive(Deserialize)]
