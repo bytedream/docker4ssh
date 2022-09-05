@@ -8,8 +8,8 @@ updates:
   - package-ecosystem: "cargo"
     directory: "container"
     schedule:
-      interval: "daily"
+      interval: "weekly"
   - package-ecosystem: "gomod"
     directory: "/server"
     schedule:
-      interval: "daily"
+      interval: "weekly"
