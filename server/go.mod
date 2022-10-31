@@ -3,13 +3,12 @@ module docker4ssh
 go 1.17
 
 require (
-	github.com/BurntSushi/toml v1.2.0
 	github.com/BurntSushi/toml v1.2.1
-  github.com/docker/docker v20.10.20+incompatible
+	github.com/docker/docker v20.10.20+incompatible
 	github.com/docker/go-units v0.5.0
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible
 	github.com/morikuni/aec v1.0.0
-	github.com/spf13/cobra v1.6.0
+	github.com/spf13/cobra v1.6.1
 	go.uber.org/zap v1.23.0
 	golang.org/x/crypto v0.0.0-20220517005047-85d78b3ac167
 )
