@@ -10,7 +10,7 @@ require (
 	github.com/morikuni/aec v1.0.0
 	github.com/spf13/cobra v1.6.1
 	go.uber.org/zap v1.23.0
-	golang.org/x/crypto v0.0.0-20220517005047-85d78b3ac167
+	golang.org/x/crypto v0.6.0
 )
 
 require (
@@ -27,8 +27,8 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	go.uber.org/atomic v1.7.0 // indirect
 	go.uber.org/multierr v1.6.0 // indirect
-	golang.org/x/net v0.0.0-20211112202133-69e39bad7dc2 // indirect
-	golang.org/x/sys v0.0.0-20210616094352-59db8d763f22 // indirect
+	golang.org/x/net v0.6.0 // indirect
+	golang.org/x/sys v0.5.0 // indirect
 	golang.org/x/time v0.0.0-20220411224347-583f2d630306 // indirect
 	gotest.tools/v3 v3.2.0 // indirect
 )
